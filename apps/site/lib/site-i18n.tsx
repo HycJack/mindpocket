@@ -13,6 +13,7 @@ const dictionaries = {
       solutions: "价格",
       platform: "多端",
       roadmap: "路线图",
+      changelog: "更新日志",
       login: "登录",
       signup: "注册",
       getStarted: "立即开始",
@@ -113,6 +114,10 @@ const dictionaries = {
       primary: "立即开始",
       secondary: "查看部署文档",
     },
+    changelog: {
+      title: "更新日志",
+      subtitle: "查看 MindPocket 最近的产品更新与体验优化。",
+    },
     footer: {
       links: ["功能", "方案", "用户", "定价", "帮助", "关于"],
       copyright: "MindPocket. All rights reserved.",
@@ -124,6 +129,7 @@ const dictionaries = {
       solutions: "Pricing",
       platform: "Platform",
       roadmap: "Roadmap",
+      changelog: "Changelog",
       login: "Login",
       signup: "Sign Up",
       getStarted: "Get Started",
@@ -227,6 +233,10 @@ const dictionaries = {
       subtitle: "Fork the repo and deploy on Vercel in minutes.",
       primary: "Get Started",
       secondary: "Deploy Guide",
+    },
+    changelog: {
+      title: "Changelog",
+      subtitle: "Track the latest product updates and improvements in MindPocket.",
     },
     footer: {
       links: ["Features", "Solutions", "Customers", "Pricing", "Help", "About"],

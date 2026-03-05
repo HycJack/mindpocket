@@ -7,14 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useSiteI18n } from "@/lib/site-i18n"
 import { cn } from "@/lib/utils"
 
-type PreviewMode = "web" | "mobile"
-
-interface HeroHeaderProps {
-  previewMode: PreviewMode
-  onPreviewModeChange: (mode: PreviewMode) => void
-}
-
-export const HeroHeader = ({ previewMode, onPreviewModeChange }: HeroHeaderProps) => {
+export const SiteHeader = () => {
   const [menuState, setMenuState] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
   const { locale, setLocale, t } = useSiteI18n()
@@ -34,6 +27,7 @@ export const HeroHeader = ({ previewMode, onPreviewModeChange }: HeroHeaderProps
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
   return (
     <header>
       <nav className="fixed z-20 w-full px-2" data-state={menuState && "active"}>
@@ -73,32 +67,6 @@ export const HeroHeader = ({ previewMode, onPreviewModeChange }: HeroHeaderProps
                   </li>
                 ))}
               </ul>
-              <div className="flex items-center gap-1 rounded-full border bg-muted/30 p-1">
-                <button
-                  className={cn(
-                    "rounded-full px-3 py-1 text-xs font-medium transition-all",
-                    previewMode === "mobile"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                  onClick={() => onPreviewModeChange("mobile")}
-                  type="button"
-                >
-                  {t.nav.mobile}
-                </button>
-                <button
-                  className={cn(
-                    "rounded-full px-3 py-1 text-xs font-medium transition-all",
-                    previewMode === "web"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                  onClick={() => onPreviewModeChange("web")}
-                  type="button"
-                >
-                  {t.nav.web}
-                </button>
-              </div>
             </div>
 
             <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
@@ -115,32 +83,6 @@ export const HeroHeader = ({ previewMode, onPreviewModeChange }: HeroHeaderProps
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 flex items-center gap-1 rounded-full border p-1">
-                  <button
-                    className={cn(
-                      "rounded-full px-3 py-1 text-xs transition-colors",
-                      previewMode === "mobile"
-                        ? "bg-foreground text-background"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                    onClick={() => onPreviewModeChange("mobile")}
-                    type="button"
-                  >
-                    {t.nav.mobile}
-                  </button>
-                  <button
-                    className={cn(
-                      "rounded-full px-3 py-1 text-xs transition-colors",
-                      previewMode === "web"
-                        ? "bg-foreground text-background"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                    onClick={() => onPreviewModeChange("web")}
-                    type="button"
-                  >
-                    {t.nav.web}
-                  </button>
-                </div>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                 <div className="flex w-full items-center gap-1 rounded-full border p-1 md:w-auto">
