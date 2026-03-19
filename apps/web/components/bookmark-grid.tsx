@@ -45,6 +45,8 @@ const platformFilters = [
   { value: "wechat", label: "微信" },
   { value: "xiaohongshu", label: "小红书" },
   { value: "bilibili", label: "哔哩哔哩" },
+  { value: "twitter", label: "X" },
+  { value: "zhihu", label: "知乎" },
 ] as const
 
 const LIST_SKELETON_KEYS = [

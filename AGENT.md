@@ -175,6 +175,5 @@ pnpm fix           # 使用 Ultracite 修复
 
 如果开始 plan mode,将 plan.md 放在docs/plans目录下面
 
-
 ## 参考
-./PROJECT.md
+./docs/PROJECT.md

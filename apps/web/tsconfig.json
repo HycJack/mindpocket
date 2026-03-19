@@ -4,7 +4,9 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@repo/icons": ["../../packages/icons/src/index.ts"],
+      "@repo/icons/*": ["../../packages/icons/src/*"]
     },
     "strictNullChecks": true
   },

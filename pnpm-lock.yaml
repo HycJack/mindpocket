@@ -27,6 +27,9 @@ importers:
 
   apps/extension:
     dependencies:
+      '@repo/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -73,6 +76,9 @@ importers:
       '@react-navigation/native':
         specifier: ^7.1.28
         version: 7.1.28(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.13)(react@19.1.0))(react@19.1.0)
+      '@repo/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       ai:
         specifier: ^6.0.77
         version: 6.0.77(zod@4.3.6)
@@ -167,6 +173,9 @@ importers:
 
   apps/site:
     dependencies:
+      '@repo/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -258,6 +267,9 @@ importers:
       '@radix-ui/react-use-controllable-state':
         specifier: ^1.2.2
         version: 1.2.2(@types/react@19.2.13)(react@19.1.0)
+      '@repo/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@rive-app/react-webgl2':
         specifier: ^4.26.2
         version: 4.26.2(react@19.1.0)
@@ -448,6 +460,25 @@ importers:
       typescript:
         specifier: 5.5.4
         version: 5.5.4
+
+  packages/icons:
+    dependencies:
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-native-svg:
+        specifier: '>=15'
+        version: 15.12.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.13)(react@19.1.0))(react@19.1.0)
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
 
   packages/types:
     devDependencies:
