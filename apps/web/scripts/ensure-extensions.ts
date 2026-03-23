@@ -1,5 +1,5 @@
-import { neon } from "@neondatabase/serverless"
 import { config } from "dotenv"
+import { Client } from "pg"
 
 config({
   path: ".env.local",
@@ -11,9 +11,17 @@ async function main() {
     throw new Error("DATABASE_URL is missing. Set it in Vercel or apps/web/.env.local")
   }
 
-  const sql = neon(databaseUrl)
-  await sql`CREATE EXTENSION IF NOT EXISTS vector`
-  console.log("[ensure-extensions] pgvector extension ready")
+  const client = new Client({
+    connectionString: databaseUrl,
+  })
+
+  try {
+    await client.connect()
+    await client.query("CREATE EXTENSION IF NOT EXISTS vector")
+    console.log("[ensure-extensions] pgvector extension ready")
+  } finally {
+    await client.end()
+  }
 }
 
 main().catch((error) => {

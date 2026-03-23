@@ -51,7 +51,7 @@ This is a pure **VIBE CODING** project:
 ### Prerequisites
 
 - [Vercel Account](https://vercel.com) (Free)
-- [Neon Account](https://neon.tech) (Free PostgreSQL)
+- A PostgreSQL database
 - LLM and Embedding Model API Key
 
 ### Deploy Steps
@@ -63,13 +63,14 @@ This is a pure **VIBE CODING** project:
    - Set Root Directory to `apps/web`
    - Keep Build Command as `pnpm build`
    - Click "Deploy"
-   - In "Integrations" tab, add Neon integration and create a free database instance
+   - Add a PostgreSQL `DATABASE_URL` in "Settings" → "Environment Variables"
+   - Neon pooled URLs work out of the box if you want a managed option
    - Connect Vercel Blob storage
-   - Add environment variables in "Settings" → "Environment Variables" (refer to `apps/web/.env.example`)
+   - Add the remaining environment variables in "Settings" → "Environment Variables" (refer to `apps/web/.env.example`)
 
 3. **Initialize Database**
    - No manual action required
-   - During build, the app runs an idempotent bootstrap (`CREATE EXTENSION IF NOT EXISTS vector` + `drizzle-kit migrate`)
+   - During build, the app runs an idempotent bootstrap (`CREATE EXTENSION IF NOT EXISTS vector` + `drizzle-kit push --force`)
 
 4. **Create Admin Account**
    - Visit your deployment URL
@@ -92,10 +93,13 @@ cd mindpocket
 # Install dependencies
 pnpm install
 
+# Start local PostgreSQL 18 with pgvector
+docker compose up -d postgres
+
 # Configure environment
 cd apps/web
 cp .env.example .env.local
-# Edit .env.local with your configuration
+# Edit .env.local with your configuration if needed
 
 # Initialize database
 pnpm db:bootstrap
@@ -106,6 +110,27 @@ pnpm dev
 ```
 
 Visit http://127.0.0.1:3000 to start using.
+
+### Local Database
+
+MindPocket expects a standard PostgreSQL `DATABASE_URL`. For local development, the repository includes a Docker Compose service that starts PostgreSQL 18 with `pgvector` enabled.
+
+```bash
+docker compose up -d postgres
+```
+
+Default local connection:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/mindpocket
+```
+
+If `pnpm db:bootstrap` fails, check these first:
+
+- Docker PostgreSQL is running
+- Port `5432` is free
+- `DATABASE_URL` points to the local container
+- The container image includes `pgvector`
 
 ### Commands
 
@@ -121,6 +146,7 @@ pnpm dev          # Start Next.js
 pnpm db:studio    # Database UI
 pnpm db:generate  # Generate migrations
 pnpm db:migrate   # Run migrations
+pnpm db:push      # Push schema directly
 
 # Native (apps/native)
 pnpm dev          # Start Expo

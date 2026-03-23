@@ -53,7 +53,7 @@ MindPocket 将你的收藏内容进行分类存储，并通过 AI Agent 进行 R
 ### 前置要求
 
 - [Vercel 账号](https://vercel.com)（免费）
-- [Neon 账号](https://neon.tech)（免费 PostgreSQL 数据库）
+- 一个 PostgreSQL 数据库
 - 大模型 和 嵌入模型 的 API Key
 
 ### 部署步骤
@@ -65,13 +65,14 @@ MindPocket 将你的收藏内容进行分类存储，并通过 AI Agent 进行 R
    - 选择 Root Directory `apps/web`
    - Build Command 保持为 `pnpm build`
    - 点击 "Deploy"
-   - 在 "Integrations" 选项卡中，添加 Neon 集成，创建一个新的免费数据库实例，并连接到你的项目（Upstash 免费 Redis 也可以添加）
+   - 在 "Settings" → "Environment Variables" 中，添加 PostgreSQL `DATABASE_URL`
+   - 如果你想继续用托管数据库，Neon 的 pooled URL 可以直接使用
    - 连接 Vercel Blob 存储
-   - 在 "Settings" → "Environment Variables" 中，添加环境变量（参考 [`apps/web/.env.example`](./apps/web/.env.example)）
+   - 继续补齐其余环境变量（参考 [`apps/web/.env.example`](./apps/web/.env.example)）
 
 3. **初始化数据库**
    - 不需要手动执行命令
-   - 构建阶段会自动执行幂等初始化（`CREATE EXTENSION IF NOT EXISTS vector` + `drizzle-kit migrate`）
+   - 构建阶段会自动执行幂等初始化（`CREATE EXTENSION IF NOT EXISTS vector` + `drizzle-kit push --force`）
 
 4. **创建管理员账号**
    - 访问你的部署地址
@@ -94,11 +95,14 @@ cd mindpocket
 # 安装依赖
 pnpm install
 
+# 启动本地 PostgreSQL 18 + pgvector
+docker compose up -d postgres
+
 # 配置环境变量
 cd apps/web
 # 模板文件：apps/web/.env.example
 cp .env.example .env.local
-# 编辑 .env.local 填入你的配置
+# 如有需要再编辑 .env.local
 
 # 初始化数据库
 pnpm db:bootstrap
@@ -109,6 +113,27 @@ pnpm dev
 ```
 
 访问 http://127.0.0.1:3000 开始使用。
+
+### 本地数据库
+
+项目现在默认读取标准 PostgreSQL `DATABASE_URL`。仓库内提供了 Docker Compose 配置，可直接启动一个带 `pgvector` 的 PostgreSQL 18 供本地开发和测试使用。
+
+```bash
+docker compose up -d postgres
+```
+
+默认本地连接：
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/mindpocket
+```
+
+如果 `pnpm db:bootstrap` 失败，优先检查：
+
+- Docker PostgreSQL 是否已经启动
+- `5432` 端口是否被占用
+- `DATABASE_URL` 是否指向本地容器
+- 当前镜像是否包含 `pgvector`
 
 ### 开发命令
 
@@ -124,6 +149,7 @@ pnpm dev          # 启动 Next.js
 pnpm db:studio    # 数据库管理界面
 pnpm db:generate  # 生成数据库迁移
 pnpm db:migrate   # 运行迁移
+pnpm db:push      # 直接同步 schema
 
 # Native 应用 (apps/native)
 pnpm dev          # 启动 Expo
