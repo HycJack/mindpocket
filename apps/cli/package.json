@@ -1,6 +1,6 @@
 {
   "name": "mindpocket",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "MindPocket CLI for agents and scripts",
   "type": "module",
   "bin": {
