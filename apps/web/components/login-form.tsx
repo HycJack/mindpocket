@@ -36,7 +36,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         onError: (ctx) => {
           toast.error(ctx.error.message || t.auth.loginFailed)
         },
-        onSuccess: () => {
+        onSuccess: (ctx) => {
+          // 若账号开启了 2FA，Better Auth 返回 twoFactorRedirect:true
+          // 此时由 twoFactorClient 插件接管跳转，不在这里显示登录成功
+          if ((ctx.data as { twoFactorRedirect?: boolean })?.twoFactorRedirect) {
+            return
+          }
           toast.success(t.auth.loginSuccess)
           window.location.href = nextPath
         },
