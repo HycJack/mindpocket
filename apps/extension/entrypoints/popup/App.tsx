@@ -1,4 +1,5 @@
 import { detectPlatform, hasPlatformIcon, PLATFORM_CONFIG } from "@repo/icons/web"
+import { Inbox, SquareMousePointer } from "lucide-react"
 import { useEffect, useState } from "react"
 import {
   type DeviceCodeResponse,
@@ -189,7 +190,9 @@ function SavePage({ onSettings }: { onSettings: () => void }) {
     url: string
     title: string
     platform: string | null
+    tabId: number | null
   } | null>(null)
+  const [actionError, setActionError] = useState("")
 
   useEffect(() => {
     browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
@@ -198,6 +201,7 @@ function SavePage({ onSettings }: { onSettings: () => void }) {
           url: tab.url,
           title: tab.title,
           platform: detectPlatform(tab.url),
+          tabId: tab.id ?? null,
         })
       }
     })
@@ -207,6 +211,22 @@ function SavePage({ onSettings }: { onSettings: () => void }) {
   const handleSave = () => {
     browser.runtime.sendMessage({ type: "SAVE_PAGE" })
     window.close()
+  }
+
+  const handlePickElement = async () => {
+    setActionError("")
+
+    try {
+      const tabId = pageInfo?.tabId
+      if (!tabId) {
+        throw new Error("当前标签页不可用。")
+      }
+
+      await browser.tabs.sendMessage(tabId, { type: "ENTER_ELEMENT_PICK_MODE" })
+      window.close()
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "当前页面无法进入元素选择模式。")
+    }
   }
 
   return (
@@ -256,8 +276,14 @@ function SavePage({ onSettings }: { onSettings: () => void }) {
         </div>
       )}
       <button className="btn btn-save" onClick={handleSave} type="button">
+        <Inbox aria-hidden="true" size={16} />
         收藏此页面
       </button>
+      <button className="btn btn-pick" onClick={handlePickElement} type="button">
+        <SquareMousePointer aria-hidden="true" size={16} />
+        选择元素保存
+      </button>
+      {actionError ? <p className="error">{actionError}</p> : null}
     </div>
   )
 }
